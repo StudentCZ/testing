@@ -35,13 +35,10 @@ def read_csv_file(filename):
     return customers
 
 
-def find_shared_customers(store1, store2):
-    store1_customers = read_csv_file(store1)
-    store2_customers = read_csv_file(store2)
-
+def find_shared_customers(*stores):
     shared_customers = []
-    for customer in store1_customers:
-        if customer in store2_customers:
+    for customer in read_csv_file(stores[0]):
+        if customer in read_csv_file(stores[1]):
             shared_customers.append(customer)
 
     shared_customers_str = "\n".join([str(customer) for customer in shared_customers])
