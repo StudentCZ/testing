@@ -14,6 +14,9 @@ class Customer:
             return self.identifier == other.identifier
         return False
 
+    def __hash__(self):
+        return hash(self.first_name + self.last_name + str(self.age) + self.state)
+
     def __str__(self):
         return "Customer: %s %s, %s, %s" % (
             self.first_name,
@@ -36,15 +39,12 @@ def read_csv_file(filename):
 
 
 def find_shared_customers(*stores):
-    shared_customers = []
-    for customer in read_csv_file(stores[0]):
-        if customer in read_csv_file(stores[1]):
-            shared_customers.append(customer)
+    shared_customers = set(read_csv_file(stores[0]))
+    for store in stores[1:]:
+        shared_customers.intersection_update(read_csv_file(store))
 
     shared_customers_str = "\n".join([str(customer) for customer in shared_customers])
-    print(shared_customers_str)
-
-    return shared_customers
+    return shared_customers_str
 
 
 if __name__ == "__main__":
