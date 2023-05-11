@@ -39,9 +39,10 @@ def read_csv_file(filename):
 
 
 def find_shared_customers(*stores):
-    shared_customers = set(read_csv_file(stores[0]))
-    for store in stores[1:]:
-        shared_customers.intersection_update(read_csv_file(store))
+    if stores is not None:
+        shared_customers = set(read_csv_file(stores[0]))
+        for store in stores[1:]:
+            shared_customers.intersection_update(read_csv_file(store))
 
     shared_customers_str = "\n".join([str(customer) for customer in shared_customers])
     return shared_customers_str
