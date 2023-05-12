@@ -15,7 +15,7 @@ class Customer:
         return False
 
     def __hash__(self):
-        return hash(self.first_name + self.last_name + str(self.age) + self.state)
+        return hash(self.identifier)
 
     def __str__(self):
         return "Customer: %s %s, %s, %s" % (
@@ -30,9 +30,14 @@ def read_csv_file(filename):
     customers = []
     with open(filename, "r") as file:
         reader = csv.reader(file)
-        next(reader)
+        try:
+            next(reader)
+        except StopIteration:
+            raise StopIteration("CSV file is empty")
         for row in reader:
-            customer = Customer(*row)
+            first_name, last_name, age, state = row
+            if age:
+                customer = Customer(first_name, last_name, int(age), state)
             if customer not in customers:
                 customers.append(customer)
     return customers
