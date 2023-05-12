@@ -1,7 +1,12 @@
 import csv
 import unittest
 import os
-from app import Customer, read_csv_file, find_shared_customers
+from app import (
+    Customer,
+    read_csv_file,
+    find_shared_customers,
+    set_shared_customers_to_string,
+)
 
 
 class TestCustomer(unittest.TestCase):
@@ -132,12 +137,33 @@ class TestCSVFileReading(unittest.TestCase):
 
         os.remove("fake_list.csv")
 
-    # def test_read_csv_file_invalid_format(self):
-    #     with open("invalid_file.csv", "w") as file:
-    #         file.write("first_name,last_name,age,state\n")
-    #         file.write("Bob,Walker,30,California\n")
-    #         file.write("Sam,Wise,25,New Jersey\n")
 
-    #     with self.assertRaises(csv.Error):
-    #         read_csv_file("invalid_file.csv")
-    #     os.remove("invalid_file.csv")
+class TestFindSharedCustomers(unittest.TestCase):
+    def test_find_shared_customers(self):
+        shared_customers = find_shared_customers("Store1.csv", "Store2.csv")
+        self.assertIsInstance(shared_customers, set)
+        self.assertEqual(len(shared_customers), 12)
+
+        expected_customers = {
+            "Customer: Charlotte Wilson, 58, Idaho",
+            "Customer: James Davis, 19, Alabama",
+            "Customer: Avery Thompson, 39, Delaware",
+            "Customer: Leo Flores, 34, Alaska",
+            "Customer: Oliver Young, 52, Colorado",
+            "Customer: Dominic Johnson, 71, Ohio",
+            "Customer: Madison Martin, 25, Massachusetts",
+            "Customer: Logan Martin, 26, Ohio",
+            "Customer: Evelyn Harris, 79, Nebraska",
+            "Customer: Natalie Rivera, 24, Kansas",
+            "Customer: Emily Kim, 72, North Dakota",
+            "Customer: Mia Perez, 22, Oregon",
+        }
+
+        self.assertSetEqual(
+            set(str(customer) for customer in shared_customers), expected_customers
+        )
+
+
+class TestSetSharedCustomersToString(unittest.TestCase):
+    def test_set_shared_customers_to_string(self):
+        customers = []
