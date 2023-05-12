@@ -43,10 +43,15 @@ def find_shared_customers(*stores):
         shared_customers = set(read_csv_file(stores[0]))
         for store in stores[1:]:
             shared_customers.intersection_update(read_csv_file(store))
-
-    shared_customers_str = "\n".join([str(customer) for customer in shared_customers])
-    return shared_customers_str
+    return shared_customers
 
 
+def set_shared_customers_to_string(shared_customers):
+    return "\n".join([str(customer) for customer in shared_customers])
+
+
+### For printing and testing purposes ###
 if __name__ == "__main__":
     shared_customers = find_shared_customers("Store1.csv", "Store2.csv")
+    shared_customers_str = set_shared_customers_to_string(shared_customers)
+    print(shared_customers_str)
